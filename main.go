@@ -14,13 +14,11 @@ func main() {
 		select {
 		case jq := <-stream:
 			messageType, err := jq.String("message_type")
+			domains, err := jq.String("data", "leaf_cert", "all_domains", "0")
 
-			if err != nil {
-				log.Fatal("Error decoding jq string")
+			if err == nil {
+				log.Info("Message type -> ", messageType, "Domains: -> ", domains)
 			}
-
-			log.Info("Message type -> ", messageType)
-			log.Info("recv: ", jq)
 
 		case err := <-errStream:
 			log.Error(err)

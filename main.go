@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/CaliDog/certstream-go"
 	logging "github.com/op/go-logging"
+	"strings"
 )
 
 var log = logging.MustGetLogger("example")
@@ -16,7 +17,7 @@ func main() {
 			messageType, err := jq.String("message_type")
 			domains, err := jq.String("data", "leaf_cert", "all_domains", "0")
 
-			if err == nil {
+			if err == nil && strings.HasSuffix(domains, ".de") {
 				log.Info("Message type -> ", messageType, "Domains: -> ", domains)
 			}
 

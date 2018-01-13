@@ -3,13 +3,14 @@ package main
 import (
 	"github.com/CaliDog/certstream-go"
 	logging "github.com/op/go-logging"
+	"os"
 	"strings"
 )
 
 var log = logging.MustGetLogger("example")
 
 func main() {
-	// The false flag specifies that we don't want heartbeat messages.
+	domain := os.Args[1]
 	stream, errStream := certstream.CertStreamEventStream(false)
 	for {
 		select {
@@ -17,7 +18,7 @@ func main() {
 			messageType, err := jq.String("message_type")
 			domains, err := jq.String("data", "leaf_cert", "all_domains", "0")
 
-			if err == nil && strings.HasSuffix(domains, ".de") {
+			if err == nil && strings.HasSuffix(domains, domain) {
 				log.Info("Message type -> ", messageType, "Domains: -> ", domains)
 			}
 
